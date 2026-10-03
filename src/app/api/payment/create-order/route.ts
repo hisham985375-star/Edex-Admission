@@ -148,8 +148,8 @@ export async function POST(req: NextRequest) {
       currency: order.currency,
       keyId: process.env.RAZORPAY_KEY_ID,
     });
-  } catch (e) {
+  } catch (e: any) {
     console.error("[Payment] Unexpected error:", e);
-    return serverError();
+    return serverError(e.message || "An unexpected error occurred");
   }
 }
