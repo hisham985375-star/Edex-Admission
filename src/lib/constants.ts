@@ -32,7 +32,7 @@ export const PAYMENT_STATUS = {
 
 // ─── Contact Info ────────────────────────────────────────────────────────────
 export const WHATSAPP_NUMBER = "919539752725"; // +91 95397 52725
-export const ADMISSIONS_EMAIL = "admissions@edexlifeschool.com";
+export const ADMISSIONS_EMAIL = "hello@admission.edexlifeschool.com";
 export const INSTAGRAM_URL = "https://www.instagram.com/edex_life_school/";
 export const ADMISSIONS_DOMAIN = "https://admissions.edexlifeschool.com";
 
