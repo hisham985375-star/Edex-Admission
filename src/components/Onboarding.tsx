@@ -53,18 +53,32 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
         {step === 1 && (
           <motion.div
             key="step1"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+            transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-8">Welcome to EDEX Life School</h1>
-            <button 
-              onClick={nextStep}
-              className="px-8 py-3 bg-edex-neon text-edex-charcoal font-bold rounded-full hover:opacity-90 transition-opacity"
+            <motion.h1 
+              initial={{ filter: "blur(20px)", opacity: 0, scale: 1.2 }}
+              animate={{ filter: "blur(0px)", opacity: 1, scale: 1 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              className="text-4xl md:text-6xl font-bold mb-8"
             >
-              Begin
-            </button>
+              Welcome to EDEX Life School
+            </motion.h1>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+            >
+              <button 
+                onClick={nextStep}
+                className="px-8 py-3 bg-edex-neon text-edex-charcoal font-bold rounded-full hover:opacity-90 transition-opacity"
+              >
+                Begin
+              </button>
+            </motion.div>
           </motion.div>
         )}
 
