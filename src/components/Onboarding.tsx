@@ -43,8 +43,13 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-edex-charcoal text-edex-white p-4">
-      <AnimatePresence mode="wait">
+    <div 
+      className="min-h-screen flex items-center justify-center text-edex-white p-4 relative bg-cover bg-center"
+      style={{ backgroundImage: "url('/images/bg-lecture-hall.png')" }}
+    >
+      <div className="absolute inset-0 bg-black/80 z-0" />
+      <div className="relative z-10 flex w-full justify-center">
+        <AnimatePresence mode="wait">
         {step === 1 && (
           <motion.div
             key="step1"
@@ -172,6 +177,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </div>
   );
 }
