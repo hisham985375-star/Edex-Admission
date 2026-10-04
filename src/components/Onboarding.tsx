@@ -44,7 +44,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
   return (
     <div 
-      className="min-h-screen flex items-center justify-center text-edex-white p-4 relative bg-cover bg-center"
+      className="min-h-screen flex items-center justify-center text-edex-white p-4 relative bg-cover bg-[75%_center] md:bg-center"
       style={{ backgroundImage: "url('/images/bg-lecture-hall.png')" }}
     >
       <div className="absolute inset-0 bg-black/80 z-0" />
