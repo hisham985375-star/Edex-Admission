@@ -95,6 +95,7 @@ const updateSchema = z.object({
   displayOrder: z.number().int().optional(),
   isActive: z.boolean().optional(),
   isDeleted: z.boolean().optional(),
+  thumbnailUrl: z.string().url().optional(),
 });
 
 /**
