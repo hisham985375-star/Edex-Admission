@@ -48,13 +48,33 @@ export async function runPostPaymentTasks(params: PostPaymentParams): Promise<vo
     receiptNumber = existingReceipt.receipt_number;
     driveFileId = existingReceipt.drive_file_id;
   } else {
-    // ─── 2. Generate receipt number from DB sequence ───────────────────────
-    const { data: seqResult } = await supabase.rpc("nextval", {
-      sequence_name: "receipt_number_seq",
-    });
+    // ─── 2. Generate admission/receipt number dynamically ───────────────────────
+    let prefix = "EDX";
+    const progUpper = program.toUpperCase();
+    if (progUpper.includes("EGX")) prefix = "EGX";
+    else if (progUpper.includes("NEXT")) prefix = "NEXT";
+    else if (progUpper.includes("LEAD")) prefix = "LEAD";
 
-    const seqNum = seqResult ? String(seqResult).padStart(5, "0") : Date.now().toString().slice(-5);
-    receiptNumber = `EDX-REC-${seqNum}`;
+    const { data: allReceipts } = await supabase
+      .from("receipts")
+      .select("receipt_number")
+      .like("receipt_number", `${prefix} - %`);
+
+    let nextNum = 1;
+    if (allReceipts && allReceipts.length > 0) {
+      for (const r of allReceipts) {
+        const match = r.receipt_number.match(/\d+$/);
+        if (match) {
+          const num = parseInt(match[0], 10);
+          if (num >= nextNum) {
+            nextNum = num + 1;
+          }
+        }
+      }
+    }
+
+    const seqNum = String(nextNum).padStart(3, "0");
+    receiptNumber = `${prefix} - ${seqNum}`;
 
     // ─── 3. Render PDF receipt ──────────────────────────────────────────────
     let receiptBuffer: Buffer | null = null;
