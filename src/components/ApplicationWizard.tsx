@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { applicationSchema, ApplicationFormData } from "@/lib/validations/application";
 import { Loader2 } from "lucide-react";
 import { trackStepComplete, trackPaymentSuccess } from "@/lib/analytics";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const steps = [
   "Program",
@@ -324,19 +326,35 @@ export default function ApplicationWizard() {
                       maxLength={10}
                       className="w-full p-4 bg-transparent border border-edex-white/20 rounded-lg focus:border-edex-neon focus:outline-none text-white [color-scheme:dark]" 
                     />
-                    <input 
-                      type="date" 
-                      className="absolute right-3 w-8 h-8 opacity-0 cursor-pointer"
-                      onChange={(e) => {
-                        const val = e.target.value; // native date picker returns YYYY-MM-DD
-                        if (val) {
-                          const parts = val.split('-');
-                          if (parts.length === 3) {
-                            setValue("dob", `${parts[2]}-${parts[1]}-${parts[0]}`, { shouldValidate: true });
+                    <div className="absolute right-3 w-8 h-8 opacity-0 overflow-hidden cursor-pointer">
+                      <DatePicker
+                        selected={(() => {
+                          const val = watch("dob") || "";
+                          if (val.length === 10) {
+                            const parts = val.split('-');
+                            if (parts.length === 3) {
+                              const d = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+                              if (!isNaN(d.getTime())) return d;
+                            }
                           }
-                        }
-                      }}
-                    />
+                          return null;
+                        })()}
+                        onChange={(date) => {
+                          if (date) {
+                            const dd = String(date.getDate()).padStart(2, '0');
+                            const mm = String(date.getMonth() + 1).padStart(2, '0');
+                            const yyyy = date.getFullYear();
+                            setValue("dob", `${dd}-${mm}-${yyyy}`, { shouldValidate: true });
+                          }
+                        }}
+                        showMonthDropdown
+                        showYearDropdown
+                        dropdownMode="select"
+                        todayButton="Today"
+                        className="w-full h-full cursor-pointer"
+                        popperPlacement="bottom-end"
+                      />
+                    </div>
                     <svg className="absolute right-4 w-6 h-6 text-edex-white/50 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
