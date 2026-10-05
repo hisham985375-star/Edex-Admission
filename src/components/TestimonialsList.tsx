@@ -54,7 +54,7 @@ export default function TestimonialsList() {
     <div className="space-y-16">
       {batches.map(batch => (
         <div key={batch}>
-          <h3 className="text-2xl min-[375px]:text-3xl font-bold mb-8 text-edex-neon text-left border-b border-edex-white/20 pb-4 whitespace-nowrap tracking-tighter md:tracking-normal overflow-hidden">
+          <h3 className="text-[clamp(1.25rem,5vw,1.875rem)] md:text-3xl font-bold mb-8 text-edex-neon text-left border-b border-edex-white/20 pb-4 whitespace-nowrap tracking-tight md:tracking-normal overflow-hidden text-ellipsis">
             {batch}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
