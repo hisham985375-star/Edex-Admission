@@ -25,7 +25,7 @@ export default function ApplicationWizard() {
   const [otpError, setOtpError] = useState("");
   const [paymentError, setPaymentError] = useState("");
 
-  const { register, handleSubmit, formState: { errors }, watch, trigger, reset } = useForm<ApplicationFormData>({
+  const { register, handleSubmit, formState: { errors }, watch, trigger, reset, setValue } = useForm<ApplicationFormData>({
     resolver: zodResolver(applicationSchema),
     defaultValues: {
       program: "EGX 100", // Default or load from local storage
@@ -301,7 +301,19 @@ export default function ApplicationWizard() {
                 </div>
                 <div>
                   <label className="block text-sm mb-2 text-edex-white/70">Date of Birth</label>
-                  <input type="text" placeholder="YYYY-MM-DD" {...register("dob")} className="w-full p-4 bg-transparent border border-edex-white/20 rounded-lg focus:border-edex-neon focus:outline-none text-white [color-scheme:dark]" />
+                  <div className="relative flex items-center">
+                    <input type="text" placeholder="YYYY-MM-DD" {...register("dob")} className="w-full p-4 bg-transparent border border-edex-white/20 rounded-lg focus:border-edex-neon focus:outline-none text-white [color-scheme:dark]" />
+                    <input 
+                      type="date" 
+                      className="absolute right-3 w-8 h-8 opacity-0 cursor-pointer"
+                      onChange={(e) => {
+                        if (e.target.value) setValue("dob", e.target.value, { shouldValidate: true });
+                      }}
+                    />
+                    <svg className="absolute right-4 w-6 h-6 text-edex-white/50 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
                   {errors.dob && <p className="text-red-500 mt-1 text-sm">{errors.dob.message}</p>}
                 </div>
                 <div>
