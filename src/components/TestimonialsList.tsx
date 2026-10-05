@@ -83,7 +83,7 @@ export default function TestimonialsList() {
                   ) : (
                     <>
                       {t.thumbnail_url ? (
-                        <img src={t.thumbnail_url} alt={t.student_name} className="w-full h-full object-cover object-[50%_20%] group-hover:scale-105 transition-transform duration-500" />
+                        <img src={t.thumbnail_url} alt={t.student_name} className="w-full h-full object-cover object-[center_35%] group-hover:scale-105 transition-transform duration-500" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-edex-white/30">No Thumbnail</div>
                       )}
