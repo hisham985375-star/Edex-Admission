@@ -6,11 +6,11 @@ import TestimonialsList from "@/components/TestimonialsList";
 
 export default function EGX100Experience({ onChangeProgram }: { onChangeProgram: () => void }) {
   return (
-    <div className="bg-edex-charcoal text-edex-white min-h-screen">
+    <div className="bg-edex-charcoal text-edex-white min-h-[100dvh]">
       {/* Header/Nav */}
       <nav className="fixed top-0 w-full p-6 flex justify-between items-center bg-edex-charcoal/80 backdrop-blur z-50">
         <img src="/edex-logo.png" alt="EDEX Life School" className="h-10 object-contain" />
-        <div className="flex gap-4">
+        <div className="hidden md:flex gap-4">
           <button onClick={onChangeProgram} className="text-edex-white/70 hover:text-edex-white transition-colors">
             Change Program
           </button>
@@ -22,7 +22,7 @@ export default function EGX100Experience({ onChangeProgram }: { onChangeProgram:
 
       {/* 1. Hero */}
       <section 
-        className="min-h-screen flex items-center justify-center p-8 pt-32 text-center relative bg-[url('/bg-egx-mobile.png')] md:bg-[url('/bg-egx.png')] bg-cover bg-center"
+        className="min-h-[100dvh] flex items-center justify-center p-8 pt-32 text-center relative bg-[url('/bg-egx-mobile.png')] md:bg-[url('/bg-egx.png')] bg-cover bg-center"
       >
         <div className="absolute inset-0 bg-black/70"></div>
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="relative z-10">
