@@ -44,17 +44,18 @@ export const step2Schema = z.object({
     .min(1, "Required")
     .max(50)
     .regex(nameRegex, "Letters and spaces only"),
-  dob: z.string().refine((val) => {
-    const d = new Date(val);
-    if (isNaN(d.getTime())) return false;
-    const now = new Date();
-    if (d > now) return false; // No future dates
-    const age = now.getFullYear() - d.getFullYear();
-    const hasBirthdayPassed =
-      now.getMonth() > d.getMonth() ||
-      (now.getMonth() === d.getMonth() && now.getDate() >= d.getDate());
-    return hasBirthdayPassed ? age >= 18 : age - 1 >= 18;
-  }, "Applicant must be at least 18 years old"),
+  dob: z.string()
+    .refine((val) => !isNaN(new Date(val).getTime()), "Invalid date format. Use YYYY-MM-DD")
+    .refine((val) => {
+      const d = new Date(val);
+      const now = new Date();
+      if (d > now) return false; // No future dates
+      const age = now.getFullYear() - d.getFullYear();
+      const hasBirthdayPassed =
+        now.getMonth() > d.getMonth() ||
+        (now.getMonth() === d.getMonth() && now.getDate() >= d.getDate());
+      return hasBirthdayPassed ? age >= 18 : age - 1 >= 18;
+    }, "Applicant must be at least 18 years old"),
   gender: z.enum(["Male", "Female", "Other"], { required_error: "Select a gender" }),
 });
 

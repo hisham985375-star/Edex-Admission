@@ -301,7 +301,7 @@ export default function ApplicationWizard() {
                 </div>
                 <div>
                   <label className="block text-sm mb-2 text-edex-white/70">Date of Birth</label>
-                  <input type="date" {...register("dob")} className="w-full p-4 bg-transparent border border-edex-white/20 rounded-lg focus:border-edex-neon focus:outline-none text-white [color-scheme:dark]" />
+                  <input type="text" placeholder="YYYY-MM-DD" {...register("dob")} className="w-full p-4 bg-transparent border border-edex-white/20 rounded-lg focus:border-edex-neon focus:outline-none text-white [color-scheme:dark]" />
                   {errors.dob && <p className="text-red-500 mt-1 text-sm">{errors.dob.message}</p>}
                 </div>
                 <div>
