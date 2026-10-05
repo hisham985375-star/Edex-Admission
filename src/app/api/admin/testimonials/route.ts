@@ -136,34 +136,39 @@ export async function PATCH(req: NextRequest) {
   let current: any;
 
   if (contentType.includes("multipart/form-data")) {
-    const formData = await req.formData();
-    id = formData.get("id") as string;
-    const studentName = formData.get("studentName") as string | null;
-    const place = formData.get("place") as string | null;
-    const batch = formData.get("batch") as string | null;
-    const displayOrder = formData.get("displayOrder") as string | null;
-    const thumbnailFile = formData.get("thumbnail") as File | null;
+    try {
+      const formData = await req.formData();
+      id = formData.get("id") as string;
+      const studentName = formData.get("studentName") as string | null;
+      const place = formData.get("place") as string | null;
+      const batch = formData.get("batch") as string | null;
+      const displayOrder = formData.get("displayOrder") as string | null;
+      const thumbnailFile = formData.get("thumbnail") as File | null;
 
-    if (!id) return err("ID is required");
+      if (!id) return err("ID is required");
 
-    const { data: cur } = await supabase.from("testimonials").select("*").eq("id", id).single();
-    if (!cur) return err("Testimonial not found", 404);
-    current = cur;
+      const { data: cur } = await supabase.from("testimonials").select("*").eq("id", id).single();
+      if (!cur) return err("Testimonial not found", 404);
+      current = cur;
 
-    if (studentName !== null) updates.student_name = studentName;
-    if (place !== null) updates.place = place;
-    if (batch !== null) updates.batch = batch;
-    if (displayOrder !== null) updates.display_order = parseInt(displayOrder ?? "0");
+      if (studentName !== null) updates.student_name = studentName;
+      if (place !== null) updates.place = place;
+      if (batch !== null) updates.batch = batch;
+      if (displayOrder !== null) updates.display_order = parseInt(displayOrder ?? "0");
 
-    if (thumbnailFile) {
-      const thumbBuffer = Buffer.from(await thumbnailFile.arrayBuffer());
-      const publicId = `${Date.now()}_${(studentName || current.student_name).replace(/\s+/g, "_").toLowerCase()}_thumb`;
-      const { secureUrl } = await uploadImageToCloudinary(
-        thumbBuffer,
-        publicId,
-        "testimonials/thumbnails"
-      );
-      updates.thumbnail_url = secureUrl;
+      if (thumbnailFile) {
+        const thumbBuffer = Buffer.from(await thumbnailFile.arrayBuffer());
+        const publicId = `${Date.now()}_${(studentName || current.student_name).replace(/\s+/g, "_").toLowerCase()}_thumb`;
+        const { secureUrl } = await uploadImageToCloudinary(
+          thumbBuffer,
+          publicId,
+          "testimonials/thumbnails"
+        );
+        updates.thumbnail_url = secureUrl;
+      }
+    } catch (e: any) {
+      console.error("[Admin Testimonials PATCH] Error parsing form data or uploading:", e);
+      return serverError(e.message || "Failed to process form data or upload thumbnail");
     }
   } else {
     let body: unknown;
