@@ -65,6 +65,46 @@ export default function AdminTestimonials() {
 
   useEffect(() => { fetchTestimonials(); }, [fetchTestimonials]);
 
+  const uploadToCloudinary = async (file: File, folder: string, resourceType: "video" | "image", publicId: string, eager?: string) => {
+    const timestamp = Math.round(new Date().getTime() / 1000).toString();
+    const paramsToSign: Record<string, string> = { timestamp, folder, public_id: publicId };
+    if (eager) paramsToSign.eager = eager;
+
+    const { data: { session } } = await supabase.auth.getSession();
+    const sigRes = await fetch("/api/admin/cloudinary/signature", {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${session?.access_token}`
+      },
+      body: JSON.stringify({ paramsToSign })
+    });
+    
+    if (!sigRes.ok) throw new Error("Failed to get upload signature");
+    const { signature, apiKey, cloudName } = await sigRes.json();
+    
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("api_key", apiKey);
+    formData.append("timestamp", timestamp);
+    formData.append("signature", signature);
+    formData.append("folder", folder);
+    formData.append("public_id", publicId);
+    if (eager) formData.append("eager", eager);
+    
+    const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`, {
+      method: "POST",
+      body: formData
+    });
+    
+    if (!uploadRes.ok) {
+      const errorData = await uploadRes.json().catch(() => ({}));
+      throw new Error(errorData?.error?.message || `Failed to upload ${resourceType} to Cloudinary`);
+    }
+    
+    return await uploadRes.json();
+  };
+
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingTestimonial && !videoFile) {
@@ -81,38 +121,56 @@ export default function AdminTestimonials() {
     try {
       let res;
       if (editingTestimonial) {
-        const formData = new FormData();
-        formData.append("id", editingTestimonial.id);
-        formData.append("studentName", studentName);
-        formData.append("place", place);
-        formData.append("batch", batch);
-        formData.append("displayOrder", displayOrder);
+        let thumbnailUrl = undefined;
+        
         if (thumbnailFile) {
-          formData.append("thumbnail", thumbnailFile);
+          const publicId = `${Date.now()}_${studentName.replace(/\s+/g, "_").toLowerCase()}_thumb`;
+          const cloudRes = await uploadToCloudinary(thumbnailFile, "testimonials/thumbnails", "image", publicId);
+          thumbnailUrl = cloudRes.secure_url;
         }
 
         res = await fetch("/api/admin/testimonials", {
           method: "PATCH",
           headers: { 
+            "Content-Type": "application/json",
             Authorization: `Bearer ${session.access_token}` 
           },
-          body: formData,
+          body: JSON.stringify({
+             id: editingTestimonial.id,
+             studentName,
+             place,
+             batch,
+             displayOrder: parseInt(displayOrder || "0"),
+             thumbnailUrl
+          }),
         });
       } else {
-        const formData = new FormData();
-        formData.append("studentName", studentName);
-        formData.append("place", place);
-        formData.append("batch", batch);
-        formData.append("displayOrder", displayOrder);
-        formData.append("video", videoFile!);
+        // Upload video directly from client
+        const baseId = `${Date.now()}_${studentName.replace(/\s+/g, "_").toLowerCase()}`;
+        const videoRes = await uploadToCloudinary(videoFile!, "testimonials", "video", baseId, "w_640,h_360,c_fill,f_jpg");
+        const videoUrl = videoRes.secure_url;
+        let thumbnailUrl = videoRes.eager?.[0]?.secure_url || videoRes.secure_url.replace(/\.[^.]+$/, ".jpg");
+
+        // Upload custom thumb directly if needed
         if (thumbnailFile) {
-          formData.append("thumbnail", thumbnailFile);
+          const thumbRes = await uploadToCloudinary(thumbnailFile, "testimonials/thumbnails", "image", `${baseId}_thumb`);
+          thumbnailUrl = thumbRes.secure_url;
         }
 
         res = await fetch("/api/admin/testimonials", {
           method: "POST",
-          headers: { Authorization: `Bearer ${session.access_token}` },
-          body: formData,
+          headers: { 
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session.access_token}` 
+          },
+          body: JSON.stringify({
+            studentName,
+            place,
+            batch,
+            displayOrder: parseInt(displayOrder || "0"),
+            videoUrl,
+            thumbnailUrl
+          }),
         });
       }
 

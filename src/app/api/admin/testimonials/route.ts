@@ -37,48 +37,23 @@ export async function POST(req: NextRequest) {
   const authResult = await verifyAdmin(req);
   if (!authResult.authorized) return authResult.response;
 
-  let formData: FormData;
-  try {
-    formData = await req.formData();
-  } catch {
-    return err("Invalid form data");
-  }
+  let body: unknown;
+  try { body = await req.json(); } catch { return err("Invalid body"); }
 
-  const studentName = formData.get("studentName") as string;
-  const place = formData.get("place") as string;
-  const batch = formData.get("batch") as string;
-  const displayOrder = parseInt((formData.get("displayOrder") as string) ?? "0");
-  const videoFile = formData.get("video") as File | null;
-  const thumbnailFile = formData.get("thumbnail") as File | null;
+  const parsed = z.object({
+    studentName: z.string().min(1),
+    place: z.string().min(1),
+    batch: z.string().min(1),
+    displayOrder: z.number().int().default(0),
+    videoUrl: z.string().url(),
+    thumbnailUrl: z.string().url(),
+  }).safeParse(body);
 
-  if (!studentName || !place || !batch || !videoFile) {
-    return err("studentName, place, batch, and video are required");
-  }
+  if (!parsed.success) return err("Invalid payload");
+  
+  const { studentName, place, batch, displayOrder, videoUrl, thumbnailUrl } = parsed.data;
 
   try {
-    const videoBuffer = Buffer.from(await videoFile.arrayBuffer());
-    const publicId = `${Date.now()}_${studentName.replace(/\s+/g, "_").toLowerCase()}`;
-
-    // Upload video — server-side signed upload (secret never leaves server)
-    const { secureUrl: videoUrl, thumbnailUrl: autoThumb } = await uploadVideoToCloudinary(
-      videoBuffer,
-      publicId,
-      "testimonials"
-    );
-
-    let finalThumbnailUrl = autoThumb;
-
-    // Upload custom thumbnail if provided
-    if (thumbnailFile) {
-      const thumbBuffer = Buffer.from(await thumbnailFile.arrayBuffer());
-      const { secureUrl } = await uploadImageToCloudinary(
-        thumbBuffer,
-        `${publicId}_thumb`,
-        "testimonials/thumbnails"
-      );
-      finalThumbnailUrl = secureUrl;
-    }
-
     const supabase = createServiceClient();
     const { data: testimonial, error: insertErr } = await supabase
       .from("testimonials")
@@ -87,7 +62,7 @@ export async function POST(req: NextRequest) {
         place,
         batch,
         video_url: videoUrl,
-        thumbnail_url: finalThumbnailUrl,
+        thumbnail_url: thumbnailUrl,
         display_order: displayOrder,
         is_active: true,
         is_deleted: false,
@@ -102,13 +77,13 @@ export async function POST(req: NextRequest) {
       action: "CREATE",
       entity: "testimonials",
       entityId: testimonial.id,
-      newValues: { studentName, place, batch, videoUrl, thumbnailUrl: finalThumbnailUrl },
+      newValues: { studentName, place, batch, videoUrl, thumbnailUrl },
     });
 
     return ok({ success: true, testimonial });
   } catch (e) {
-    console.error("[Admin Testimonials] Upload error:", e);
-    return serverError("Failed to upload testimonial. Please try again.");
+    console.error("[Admin Testimonials] Create error:", e);
+    return serverError("Failed to save testimonial. Please try again.");
   }
 }
 
@@ -129,66 +104,26 @@ export async function PATCH(req: NextRequest) {
   const authResult = await verifyAdmin(req);
   if (!authResult.authorized) return authResult.response;
 
-  const contentType = req.headers.get("content-type") || "";
+  let body: unknown;
+  try { body = await req.json(); } catch { return err("Invalid body"); }
+
+  const parsed = updateSchema.safeParse(body);
+  if (!parsed.success) return err(parsed.error.issues[0]?.message ?? "Validation failed");
+
+  const { id, studentName, place, batch, displayOrder, isActive, isDeleted, thumbnailUrl } = parsed.data as any; // any because we need to extract thumbnailUrl too
   const supabase = createServiceClient();
+
+  const { data: current } = await supabase.from("testimonials").select("*").eq("id", id).single();
+  if (!current) return err("Testimonial not found", 404);
+
   const updates: Record<string, unknown> = { updated_at: new Date().toISOString() };
-  let id: string;
-  let current: any;
-
-  if (contentType.includes("multipart/form-data")) {
-    try {
-      const formData = await req.formData();
-      id = formData.get("id") as string;
-      const studentName = formData.get("studentName") as string | null;
-      const place = formData.get("place") as string | null;
-      const batch = formData.get("batch") as string | null;
-      const displayOrder = formData.get("displayOrder") as string | null;
-      const thumbnailFile = formData.get("thumbnail") as File | null;
-
-      if (!id) return err("ID is required");
-
-      const { data: cur } = await supabase.from("testimonials").select("*").eq("id", id).single();
-      if (!cur) return err("Testimonial not found", 404);
-      current = cur;
-
-      if (studentName !== null) updates.student_name = studentName;
-      if (place !== null) updates.place = place;
-      if (batch !== null) updates.batch = batch;
-      if (displayOrder !== null) updates.display_order = parseInt(displayOrder ?? "0");
-
-      if (thumbnailFile) {
-        const thumbBuffer = Buffer.from(await thumbnailFile.arrayBuffer());
-        const publicId = `${Date.now()}_${(studentName || current.student_name).replace(/\s+/g, "_").toLowerCase()}_thumb`;
-        const { secureUrl } = await uploadImageToCloudinary(
-          thumbBuffer,
-          publicId,
-          "testimonials/thumbnails"
-        );
-        updates.thumbnail_url = secureUrl;
-      }
-    } catch (e: any) {
-      console.error("[Admin Testimonials PATCH] Error parsing form data or uploading:", e);
-      return serverError(e.message || "Failed to process form data or upload thumbnail");
-    }
-  } else {
-    let body: unknown;
-    try { body = await req.json(); } catch { return err("Invalid body"); }
-
-    const parsed = updateSchema.safeParse(body);
-    if (!parsed.success) return err(parsed.error.issues[0]?.message ?? "Validation failed");
-
-    id = parsed.data.id;
-    const { data: cur } = await supabase.from("testimonials").select("*").eq("id", id).single();
-    if (!cur) return err("Testimonial not found", 404);
-    current = cur;
-
-    if (parsed.data.studentName !== undefined) updates.student_name = parsed.data.studentName;
-    if (parsed.data.place !== undefined) updates.place = parsed.data.place;
-    if (parsed.data.batch !== undefined) updates.batch = parsed.data.batch;
-    if (parsed.data.displayOrder !== undefined) updates.display_order = parsed.data.displayOrder;
-    if (parsed.data.isActive !== undefined) updates.is_active = parsed.data.isActive;
-    if (parsed.data.isDeleted !== undefined) updates.is_deleted = parsed.data.isDeleted;
-  }
+  if (studentName !== undefined) updates.student_name = studentName;
+  if (place !== undefined) updates.place = place;
+  if (batch !== undefined) updates.batch = batch;
+  if (displayOrder !== undefined) updates.display_order = displayOrder;
+  if (isActive !== undefined) updates.is_active = isActive;
+  if (isDeleted !== undefined) updates.is_deleted = isDeleted;
+  if (thumbnailUrl !== undefined) updates.thumbnail_url = thumbnailUrl;
 
   const { error } = await supabase.from("testimonials").update(updates).eq("id", id);
   if (error) return serverError();
