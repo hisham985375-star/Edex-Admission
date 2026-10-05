@@ -33,7 +33,7 @@ export default function EGX100Experience({ onChangeProgram }: { onChangeProgram:
           <p className="text-xl text-edex-white/70 max-w-2xl mx-auto mb-12">
             100 Days. 14 Industry Experts. 14 Business Projects. 14 Human Skills.
           </p>
-          <a href="#apply" className="inline-block bg-edex-neon text-edex-charcoal px-8 py-4 font-bold rounded-full text-lg hover:bg-white transition-colors">
+          <a href="#journey" className="inline-block bg-edex-neon text-edex-charcoal px-8 py-4 font-bold rounded-full text-lg hover:bg-white transition-colors">
             Start Your Journey
           </a>
         </motion.div>
@@ -74,7 +74,7 @@ export default function EGX100Experience({ onChangeProgram }: { onChangeProgram:
       </section>
 
       {/* 8. Four Phases */}
-      <section className="py-32 px-8 bg-black/50">
+      <section id="journey" className="py-32 px-8 bg-black/50">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold mb-16 text-center">The 100-Day Journey</h2>
           <div className="space-y-8">
