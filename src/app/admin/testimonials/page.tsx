@@ -81,19 +81,22 @@ export default function AdminTestimonials() {
     try {
       let res;
       if (editingTestimonial) {
+        const formData = new FormData();
+        formData.append("id", editingTestimonial.id);
+        formData.append("studentName", studentName);
+        formData.append("place", place);
+        formData.append("batch", batch);
+        formData.append("displayOrder", displayOrder);
+        if (thumbnailFile) {
+          formData.append("thumbnail", thumbnailFile);
+        }
+
         res = await fetch("/api/admin/testimonials", {
           method: "PATCH",
           headers: { 
-            "Content-Type": "application/json",
             Authorization: `Bearer ${session.access_token}` 
           },
-          body: JSON.stringify({
-            id: editingTestimonial.id,
-            studentName,
-            place,
-            batch,
-            displayOrder: parseInt(displayOrder || "0"),
-          }),
+          body: formData,
         });
       } else {
         const formData = new FormData();
@@ -427,28 +430,32 @@ export default function AdminTestimonials() {
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-1.5">Custom Thumbnail (Optional)</label>
-                    <div className="flex items-center gap-4">
-                      <input 
-                        type="file" 
-                        ref={thumbInputRef} 
-                        className="hidden" 
-                        accept="image/*" 
-                        onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)} 
-                      />
-                      <button
-                        type="button"
-                        onClick={() => thumbInputRef.current?.click()}
-                        className="px-4 py-2 bg-gray-800 text-white rounded-lg text-sm hover:bg-gray-700 transition-colors"
-                      >
-                        {thumbnailFile ? "Change Thumbnail" : "Browse Image"}
-                      </button>
-                      {thumbnailFile && <span className="text-sm text-gray-400 truncate max-w-[200px]">{thumbnailFile.name}</span>}
-                    </div>
-                  </div>
                 </div>
               )}
+
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-400 mb-1.5">Custom Thumbnail (Optional)</label>
+                <div className="flex items-center gap-4">
+                  <input 
+                    type="file" 
+                    ref={thumbInputRef} 
+                    className="hidden" 
+                    accept="image/*" 
+                    onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)} 
+                  />
+                  <button
+                    type="button"
+                    onClick={() => thumbInputRef.current?.click()}
+                    className="px-4 py-2 bg-gray-800 text-white rounded-lg text-sm hover:bg-gray-700 transition-colors"
+                  >
+                    {thumbnailFile ? "Change Thumbnail" : "Browse Image"}
+                  </button>
+                  {thumbnailFile && <span className="text-sm text-gray-400 truncate max-w-[200px]">{thumbnailFile.name}</span>}
+                  {editingTestimonial && !thumbnailFile && (
+                    <span className="text-sm text-gray-500">Leave blank to keep current banner</span>
+                  )}
+                </div>
+              </div>
 
               {uploadError && <div className="p-3 bg-red-900/30 border border-red-900 text-red-400 rounded-lg text-sm mb-6">{uploadError}</div>}
 

@@ -129,32 +129,68 @@ export async function PATCH(req: NextRequest) {
   const authResult = await verifyAdmin(req);
   if (!authResult.authorized) return authResult.response;
 
-  let body: unknown;
-  try { body = await req.json(); } catch { return err("Invalid body"); }
-
-  const parsed = updateSchema.safeParse(body);
-  if (!parsed.success) return err(parsed.error.issues[0]?.message ?? "Validation failed");
-
-  const { id, studentName, place, batch, displayOrder, isActive, isDeleted } = parsed.data;
+  const contentType = req.headers.get("content-type") || "";
   const supabase = createServiceClient();
-
-  const { data: current } = await supabase.from("testimonials").select("*").eq("id", id).single();
-  if (!current) return err("Testimonial not found", 404);
-
   const updates: Record<string, unknown> = { updated_at: new Date().toISOString() };
-  if (studentName !== undefined) updates.student_name = studentName;
-  if (place !== undefined) updates.place = place;
-  if (batch !== undefined) updates.batch = batch;
-  if (displayOrder !== undefined) updates.display_order = displayOrder;
-  if (isActive !== undefined) updates.is_active = isActive;
-  if (isDeleted !== undefined) updates.is_deleted = isDeleted;
+  let id: string;
+  let current: any;
+
+  if (contentType.includes("multipart/form-data")) {
+    const formData = await req.formData();
+    id = formData.get("id") as string;
+    const studentName = formData.get("studentName") as string | null;
+    const place = formData.get("place") as string | null;
+    const batch = formData.get("batch") as string | null;
+    const displayOrder = formData.get("displayOrder") as string | null;
+    const thumbnailFile = formData.get("thumbnail") as File | null;
+
+    if (!id) return err("ID is required");
+
+    const { data: cur } = await supabase.from("testimonials").select("*").eq("id", id).single();
+    if (!cur) return err("Testimonial not found", 404);
+    current = cur;
+
+    if (studentName !== null) updates.student_name = studentName;
+    if (place !== null) updates.place = place;
+    if (batch !== null) updates.batch = batch;
+    if (displayOrder !== null) updates.display_order = parseInt(displayOrder ?? "0");
+
+    if (thumbnailFile) {
+      const thumbBuffer = Buffer.from(await thumbnailFile.arrayBuffer());
+      const publicId = `${Date.now()}_${(studentName || current.student_name).replace(/\s+/g, "_").toLowerCase()}_thumb`;
+      const { secureUrl } = await uploadImageToCloudinary(
+        thumbBuffer,
+        publicId,
+        "testimonials/thumbnails"
+      );
+      updates.thumbnail_url = secureUrl;
+    }
+  } else {
+    let body: unknown;
+    try { body = await req.json(); } catch { return err("Invalid body"); }
+
+    const parsed = updateSchema.safeParse(body);
+    if (!parsed.success) return err(parsed.error.issues[0]?.message ?? "Validation failed");
+
+    id = parsed.data.id;
+    const { data: cur } = await supabase.from("testimonials").select("*").eq("id", id).single();
+    if (!cur) return err("Testimonial not found", 404);
+    current = cur;
+
+    if (parsed.data.studentName !== undefined) updates.student_name = parsed.data.studentName;
+    if (parsed.data.place !== undefined) updates.place = parsed.data.place;
+    if (parsed.data.batch !== undefined) updates.batch = parsed.data.batch;
+    if (parsed.data.displayOrder !== undefined) updates.display_order = parsed.data.displayOrder;
+    if (parsed.data.isActive !== undefined) updates.is_active = parsed.data.isActive;
+    if (parsed.data.isDeleted !== undefined) updates.is_deleted = parsed.data.isDeleted;
+  }
 
   const { error } = await supabase.from("testimonials").update(updates).eq("id", id);
   if (error) return serverError();
 
   await logAdminAction({
     adminId: authResult.adminId,
-    action: isDeleted === true ? "SOFT_DELETE" : isDeleted === false ? "RESTORE" : "UPDATE",
+    action: "UPDATE",
     entity: "testimonials",
     entityId: id,
     previousValues: current,
