@@ -22,9 +22,9 @@ export default function EGX100Experience({ onChangeProgram }: { onChangeProgram:
 
       {/* 1. Hero */}
       <section 
-        className="min-h-screen flex items-center justify-center p-8 pt-32 text-center relative bg-none md:bg-[url('/bg-egx.png')] md:bg-cover md:bg-center"
+        className="min-h-screen flex items-center justify-center p-8 pt-32 text-center relative bg-[url('/bg-egx-mobile.png')] md:bg-[url('/bg-egx.png')] bg-cover bg-center"
       >
-        <div className="absolute inset-0 hidden md:block md:bg-black/70"></div>
+        <div className="absolute inset-0 bg-black/70"></div>
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="relative z-10">
           <h1 className="text-6xl md:text-8xl font-bold mb-6 text-edex-neon">EGX 100</h1>
           <p className="text-2xl md:text-4xl mb-8 max-w-3xl mx-auto">
