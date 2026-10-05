@@ -353,7 +353,7 @@ export default function AdminTestimonials() {
                         loop 
                       />
                     ) : (
-                      <img src={t.thumbnail_url} alt={t.student_name} className="w-full h-full object-cover object-[center_25%] group-hover:scale-105 transition-transform duration-500" />
+                      <img src={t.thumbnail_url} alt={t.student_name} className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${t.student_name.toLowerCase().includes("mukthar") ? "object-top" : "object-[center_25%]"}`} />
                     )}
                     {!t.is_active && (
                       <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
