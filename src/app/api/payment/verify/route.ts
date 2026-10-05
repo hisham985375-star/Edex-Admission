@@ -134,8 +134,8 @@ export async function POST(req: NextRequest) {
     });
 
     // 7. Trigger async post-payment tasks (receipt, email, Sheets sync)
-    // Fire-and-forget — application is already PAID before this runs
-    runPostPaymentTasks({
+    // We await this so Vercel doesn't kill the serverless function before the email is sent.
+    await runPostPaymentTasks({
       applicationId,
       razorpayPaymentId,
       name: `${app.first_name} ${app.last_name}`,
