@@ -302,12 +302,39 @@ export default function ApplicationWizard() {
                 <div>
                   <label className="block text-sm mb-2 text-edex-white/70">Date of Birth</label>
                   <div className="relative flex items-center">
-                    <input type="text" placeholder="YYYY-MM-DD" {...register("dob")} className="w-full p-4 bg-transparent border border-edex-white/20 rounded-lg focus:border-edex-neon focus:outline-none text-white [color-scheme:dark]" />
+                    <input 
+                      type="text" 
+                      placeholder="DD-MM-YYYY" 
+                      {...register("dob", {
+                        onChange: (e) => {
+                          let val = e.target.value;
+                          if (val.endsWith('-')) return; 
+                          const raw = val.replace(/\D/g, "");
+                          if (raw.length > 8) val = raw.slice(0, 8);
+                          if (raw.length >= 5) {
+                            val = `${raw.slice(0, 2)}-${raw.slice(2, 4)}-${raw.slice(4)}`;
+                          } else if (raw.length >= 3) {
+                            val = `${raw.slice(0, 2)}-${raw.slice(2)}`;
+                          } else {
+                            val = raw;
+                          }
+                          e.target.value = val;
+                        }
+                      })} 
+                      maxLength={10}
+                      className="w-full p-4 bg-transparent border border-edex-white/20 rounded-lg focus:border-edex-neon focus:outline-none text-white [color-scheme:dark]" 
+                    />
                     <input 
                       type="date" 
                       className="absolute right-3 w-8 h-8 opacity-0 cursor-pointer"
                       onChange={(e) => {
-                        if (e.target.value) setValue("dob", e.target.value, { shouldValidate: true });
+                        const val = e.target.value; // native date picker returns YYYY-MM-DD
+                        if (val) {
+                          const parts = val.split('-');
+                          if (parts.length === 3) {
+                            setValue("dob", `${parts[2]}-${parts[1]}-${parts[0]}`, { shouldValidate: true });
+                          }
+                        }
                       }}
                     />
                     <svg className="absolute right-4 w-6 h-6 text-edex-white/50 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">

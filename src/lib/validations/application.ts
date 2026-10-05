@@ -45,9 +45,23 @@ export const step2Schema = z.object({
     .max(50)
     .regex(nameRegex, "Letters and spaces only"),
   dob: z.string()
-    .refine((val) => !isNaN(new Date(val).getTime()), "Invalid date format. Use YYYY-MM-DD")
     .refine((val) => {
-      const d = new Date(val);
+      const parts = val.split(/[-/]/);
+      if (parts.length !== 3) return false;
+      let d;
+      if (parts[0].length === 4) {
+         d = new Date(val); // YYYY-MM-DD
+      } else {
+         d = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`); // DD-MM-YYYY
+      }
+      return !isNaN(d.getTime());
+    }, "Invalid date format. Use DD-MM-YYYY")
+    .refine((val) => {
+      const parts = val.split(/[-/]/);
+      let d;
+      if (parts[0].length === 4) d = new Date(val);
+      else d = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+      
       const now = new Date();
       if (d > now) return false; // No future dates
       const age = now.getFullYear() - d.getFullYear();
