@@ -353,7 +353,7 @@ export default function AdminTestimonials() {
                         loop 
                       />
                     ) : (
-                      <img src={t.thumbnail_url} alt={t.student_name} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" />
+                      <img src={t.thumbnail_url} alt={t.student_name} className="w-full h-full object-cover object-[50%_20%] group-hover:scale-105 transition-transform duration-500" />
                     )}
                     {!t.is_active && (
                       <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
