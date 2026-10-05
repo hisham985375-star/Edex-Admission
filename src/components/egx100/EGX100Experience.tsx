@@ -8,13 +8,13 @@ export default function EGX100Experience({ onChangeProgram }: { onChangeProgram:
   return (
     <div className="bg-edex-charcoal text-edex-white min-h-[100dvh]">
       {/* Header/Nav */}
-      <nav className="fixed top-0 w-full p-6 flex justify-between items-center bg-edex-charcoal/80 backdrop-blur z-50">
-        <img src="/edex-logo.png" alt="EDEX Life School" className="h-10 object-contain" />
-        <div className="flex gap-4">
-          <button onClick={onChangeProgram} className="text-edex-white/70 hover:text-edex-white transition-colors">
+      <nav className="fixed top-0 w-full p-4 md:p-6 flex justify-between items-center bg-transparent md:bg-edex-charcoal/80 backdrop-blur-none md:backdrop-blur z-50">
+        <img src="/edex-logo.png" alt="EDEX Life School" className="h-8 md:h-10 object-contain" />
+        <div className="flex gap-2 md:gap-4 items-center">
+          <button onClick={onChangeProgram} className="text-xs md:text-base text-edex-white/70 hover:text-edex-white transition-colors">
             Change Program
           </button>
-          <a href="#apply" className="bg-edex-neon text-edex-charcoal px-4 py-2 font-bold rounded">
+          <a href="#apply" className="bg-edex-neon text-edex-charcoal px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-base font-bold rounded">
             Apply Now
           </a>
         </div>
