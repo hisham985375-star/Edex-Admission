@@ -20,13 +20,12 @@ const steps = [
 
 export default function ApplicationWizard() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [isSaving, setIsSaving] = useState(false);
   const [otpStep, setOtpStep] = useState<"idle" | "sending" | "sent" | "verifying" | "verified" | "processing_payment">("idle");
   const [otp, setOtp] = useState("");
   const [otpError, setOtpError] = useState("");
   const [paymentError, setPaymentError] = useState("");
 
-  const { register, handleSubmit, formState: { errors }, watch, trigger } = useForm<ApplicationFormData>({
+  const { register, handleSubmit, formState: { errors }, watch, trigger, reset } = useForm<ApplicationFormData>({
     resolver: zodResolver(applicationSchema),
     defaultValues: {
       program: "EGX 100", // Default or load from local storage
@@ -38,22 +37,18 @@ export default function ApplicationWizard() {
 
   useEffect(() => {
     try {
-      const savedProgram = localStorage.getItem("edex_selected_program");
-      if (savedProgram) {
-        // Set the program
+      const savedData = localStorage.getItem("edex_application_draft");
+      if (savedData) {
+        reset(JSON.parse(savedData));
+      }
+      const savedStep = localStorage.getItem("edex_application_step");
+      if (savedStep) {
+        setCurrentStep(parseInt(savedStep, 10));
       }
     } catch (e) {
       console.error("localStorage access denied");
     }
-  }, []);
-
-  const saveDraft = async (data: Partial<ApplicationFormData>) => {
-    setIsSaving(true);
-    // In a real app, make API call here
-    // await fetch('/api/drafts', { method: 'POST', body: JSON.stringify(data) });
-    console.log("Saving draft...", data);
-    setTimeout(() => setIsSaving(false), 500);
-  };
+  }, [reset]);
 
   const nextStep = async () => {
     let fieldsToValidate: any[] = [];
@@ -71,14 +66,18 @@ export default function ApplicationWizard() {
     
     if (isStepValid) {
       const currentData = watch();
-      await saveDraft(currentData);
+      localStorage.setItem("edex_application_draft", JSON.stringify(currentData));
+      const nextStepIndex = currentStep + 1;
+      localStorage.setItem("edex_application_step", nextStepIndex.toString());
       trackStepComplete(steps[currentStep], currentStep, currentData.program);
-      setCurrentStep(prev => prev + 1);
+      setCurrentStep(nextStepIndex);
     }
   };
 
   const prevStep = () => {
-    setCurrentStep(prev => prev - 1);
+    const prevStepIndex = currentStep - 1;
+    localStorage.setItem("edex_application_step", prevStepIndex.toString());
+    setCurrentStep(prevStepIndex);
   };
 
   const onSubmit = async (data: ApplicationFormData) => {
@@ -263,11 +262,6 @@ export default function ApplicationWizard() {
 
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">{steps[currentStep]}</h1>
-        {currentStep > 0 && currentStep < steps.length - 1 && (
-          <button className="text-edex-white/50 hover:text-edex-neon transition-colors text-sm font-bold">
-            {isSaving ? "Saving..." : "Save & Resume Later"}
-          </button>
-        )}
       </div>
 
       <form onSubmit={handleSubmit(onSubmit, (errs) => console.error("Form Validation Errors:", errs))}>
