@@ -326,7 +326,7 @@ export default function ApplicationWizard() {
                       maxLength={10}
                       className="w-full p-4 bg-transparent border border-edex-white/20 rounded-lg focus:border-edex-neon focus:outline-none text-white [color-scheme:dark]" 
                     />
-                    <div className="absolute right-3 w-8 h-8 opacity-0 overflow-hidden cursor-pointer">
+                    <div className="absolute right-3 w-8 h-8 cursor-pointer">
                       <DatePicker
                         selected={(() => {
                           const val = watch("dob") || "";
@@ -351,14 +351,13 @@ export default function ApplicationWizard() {
                         showYearDropdown
                         dropdownMode="select"
                         todayButton="Today"
-                        className="w-full h-full cursor-pointer"
                         popperPlacement="bottom-end"
+                        customInput={<input className="w-8 h-8 opacity-0 cursor-pointer absolute z-10 right-0 top-0" />}
                       />
+                      <svg className="absolute inset-0 m-auto w-6 h-6 text-edex-white/50 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
                     </div>
-                    <svg className="absolute right-4 w-6 h-6 text-edex-white/50 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
                   {errors.dob && <p className="text-red-500 mt-1 text-sm">{errors.dob.message}</p>}
                 </div>
                 <div>
