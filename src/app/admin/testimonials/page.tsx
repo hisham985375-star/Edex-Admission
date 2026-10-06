@@ -340,7 +340,7 @@ export default function AdminTestimonials() {
                 const getObjectPosition = (name: string, type: 'video' | 'thumbnail') => {
                   const n = name.toLowerCase();
                   if (n.includes("mukthar")) return type === 'video' ? "object-[center_60%]" : "object-top";
-                  if (n.includes("vyshnav") || n.includes("asil ali")) return "object-[center_70%]";
+                  if (n.includes("vyshnav") || n.includes("asil ali") || n.includes("afsal")) return "object-top";
                   return "object-[center_25%]";
                 };
 
