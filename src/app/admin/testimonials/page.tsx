@@ -348,7 +348,7 @@ export default function AdminTestimonials() {
                     {hoveredId === t.id ? (
                       <video 
                         src={t.video_url} 
-                        className="w-full h-full object-cover" 
+                        className={`w-full h-full object-cover ${t.student_name.toLowerCase().includes("mukthar") ? "object-top" : "object-[center_25%]"}`} 
                         autoPlay 
                         loop 
                       />

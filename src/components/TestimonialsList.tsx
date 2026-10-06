@@ -71,14 +71,14 @@ export default function TestimonialsList() {
                       src={t.video_url} 
                       controls 
                       autoPlay 
-                      className="w-full h-full object-cover"
+                      className={`w-full h-full object-cover ${t.student_name.toLowerCase().includes("mukthar") ? "object-top" : "object-[center_25%]"}`}
                     />
                   ) : hoveredId === t.id && !playingId ? (
                     <video 
                       src={t.video_url} 
                       autoPlay 
                       loop 
-                      className="w-full h-full object-cover"
+                      className={`w-full h-full object-cover ${t.student_name.toLowerCase().includes("mukthar") ? "object-top" : "object-[center_25%]"}`}
                     />
                   ) : (
                     <>
@@ -87,9 +87,9 @@ export default function TestimonialsList() {
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-edex-white/30">No Thumbnail</div>
                       )}
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <div className="bg-edex-neon text-edex-charcoal p-4 rounded-full opacity-90 group-hover:scale-110 transition-transform shadow-[0_0_20px_rgba(206,255,0,0.3)]">
-                          <Play className="w-6 h-6 ml-1" fill="currentColor" />
+                      <div className="absolute top-3 right-3 pointer-events-none">
+                        <div className="bg-edex-neon text-edex-charcoal p-3 rounded-full opacity-90 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(206,255,0,0.3)]">
+                          <Play className="w-5 h-5 ml-1" fill="currentColor" />
                         </div>
                       </div>
                     </>
