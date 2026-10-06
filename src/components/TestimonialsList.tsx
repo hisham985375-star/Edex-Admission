@@ -83,7 +83,7 @@ export default function TestimonialsList() {
                   ) : (
                     <>
                       {t.thumbnail_url ? (
-                        <img src={t.thumbnail_url} alt={t.student_name} className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${t.student_name.toLowerCase().includes("mukthar") ? "object-[center_60%]" : "object-[center_25%]"}`} />
+                        <img src={t.thumbnail_url} alt={t.student_name} className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${t.student_name.toLowerCase().includes("mukthar") ? "object-top" : "object-[center_25%]"}`} />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-edex-white/30">No Thumbnail</div>
                       )}
