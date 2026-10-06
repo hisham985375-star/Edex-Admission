@@ -53,7 +53,8 @@ export default function TestimonialsList() {
   const getObjectPosition = (name: string, type: 'video' | 'thumbnail') => {
     const n = name.toLowerCase();
     if (n.includes("mukthar")) return type === 'video' ? "object-[center_60%]" : "object-top";
-    if (n.includes("vyshnav") || n.includes("asil ali") || n.includes("afsal")) return "object-[center_45%]";
+    if (n.includes("vyshnav") || n.includes("asil ali")) return "object-[center_45%]";
+    if (n.includes("afsal")) return "object-[center_15%]";
     return "object-[center_25%]";
   };
 
