@@ -348,12 +348,12 @@ export default function AdminTestimonials() {
                     {hoveredId === t.id ? (
                       <video 
                         src={t.video_url} 
-                        className={`w-full h-full object-cover ${t.student_name.toLowerCase().includes("mukthar") ? "object-top" : "object-[center_25%]"}`} 
+                        className={`w-full h-full object-cover ${t.student_name.toLowerCase().includes("mukthar") ? "object-[center_60%]" : "object-[center_25%]"}`} 
                         autoPlay 
                         loop 
                       />
                     ) : (
-                      <img src={t.thumbnail_url} alt={t.student_name} className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${t.student_name.toLowerCase().includes("mukthar") ? "object-top" : "object-[center_25%]"}`} />
+                      <img src={t.thumbnail_url} alt={t.student_name} className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${t.student_name.toLowerCase().includes("mukthar") ? "object-[center_60%]" : "object-[center_25%]"}`} />
                     )}
                     {!t.is_active && (
                       <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
