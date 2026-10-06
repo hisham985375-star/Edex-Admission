@@ -50,6 +50,13 @@ export default function TestimonialsList() {
   // Group by batch
   const batches = Array.from(new Set(testimonials.map(t => t.batch)));
 
+  const getObjectPosition = (name: string, type: 'video' | 'thumbnail') => {
+    const n = name.toLowerCase();
+    if (n.includes("mukthar")) return type === 'video' ? "object-[center_60%]" : "object-top";
+    if (n.includes("vyshnav") || n.includes("asil ali")) return "object-[center_70%]";
+    return "object-[center_25%]";
+  };
+
   return (
     <div className="space-y-16">
       {batches.map(batch => (
@@ -71,19 +78,19 @@ export default function TestimonialsList() {
                       src={t.video_url} 
                       controls 
                       autoPlay 
-                      className={`w-full h-full object-cover ${t.student_name.toLowerCase().includes("mukthar") ? "object-[center_60%]" : "object-[center_25%]"}`}
+                      className={`w-full h-full object-cover ${getObjectPosition(t.student_name, 'video')}`}
                     />
                   ) : hoveredId === t.id && !playingId ? (
                     <video 
                       src={t.video_url} 
                       autoPlay 
                       loop 
-                      className={`w-full h-full object-cover ${t.student_name.toLowerCase().includes("mukthar") ? "object-[center_60%]" : "object-[center_25%]"}`}
+                      className={`w-full h-full object-cover ${getObjectPosition(t.student_name, 'video')}`}
                     />
                   ) : (
                     <>
                       {t.thumbnail_url ? (
-                        <img src={t.thumbnail_url} alt={t.student_name} className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${t.student_name.toLowerCase().includes("mukthar") ? "object-top" : "object-[center_25%]"}`} />
+                        <img src={t.thumbnail_url} alt={t.student_name} className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${getObjectPosition(t.student_name, 'thumbnail')}`} />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-edex-white/30">No Thumbnail</div>
                       )}
