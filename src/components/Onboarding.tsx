@@ -19,6 +19,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
     reason: "",
     turnstileToken: "",
   });
+  const [selectedGoal, setSelectedGoal] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
@@ -159,14 +160,39 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             exit={{ opacity: 0, x: -20 }}
             className="w-full max-w-md"
           >
-            <h2 className="text-3xl font-bold mb-6">Why are you connecting with EDEX?</h2>
+            <h2 className="text-3xl font-bold mb-6">What do you want to achieve with EDEX?</h2>
             <div className="space-y-4">
-              <textarea 
-                placeholder="Share your goals or what you're looking for..." 
-                className="w-full p-4 bg-transparent border border-edex-white/20 rounded-lg focus:border-edex-neon focus:outline-none min-h-[150px]"
-                value={formData.reason}
-                onChange={(e) => setFormData({...formData, reason: e.target.value})}
-              />
+              <div className="space-y-3">
+                {["Build a Business", "Build a Career", "Upgrade My Skills", "Other"].map((goal) => (
+                  <label key={goal} className={`flex items-center space-x-3 cursor-pointer p-4 border rounded-lg transition-colors ${selectedGoal === goal ? 'border-edex-neon bg-edex-neon/10' : 'border-edex-white/20 hover:border-edex-white/40'}`}>
+                    <input 
+                      type="radio" 
+                      name="goal" 
+                      value={goal}
+                      checked={selectedGoal === goal}
+                      onChange={(e) => {
+                        setSelectedGoal(e.target.value);
+                        if (e.target.value !== "Other") {
+                          setFormData({...formData, reason: e.target.value});
+                        } else {
+                          setFormData({...formData, reason: ""});
+                        }
+                      }}
+                      className="w-5 h-5 accent-edex-neon"
+                    />
+                    <span className="text-lg">{goal}</span>
+                  </label>
+                ))}
+              </div>
+
+              {selectedGoal === "Other" && (
+                <textarea 
+                  placeholder="Please specify..." 
+                  className="w-full p-4 bg-transparent border border-edex-white/20 rounded-lg focus:border-edex-neon focus:outline-none min-h-[100px]"
+                  value={formData.reason}
+                  onChange={(e) => setFormData({...formData, reason: e.target.value})}
+                />
+              )}
               
               <div className="flex justify-center my-4">
                 <Turnstile
