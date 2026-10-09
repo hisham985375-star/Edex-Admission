@@ -19,6 +19,7 @@ export default function TestimonialsList() {
   const [loading, setLoading] = useState(true);
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(6);
 
   useEffect(() => {
     async function fetchTestimonials() {
@@ -47,8 +48,10 @@ export default function TestimonialsList() {
     return <div className="text-center text-edex-white/50">No testimonials available yet.</div>;
   }
 
+  const visibleTestimonials = testimonials.slice(0, visibleCount);
+
   // Group by batch
-  const batches = Array.from(new Set(testimonials.map(t => t.batch)));
+  const batches = Array.from(new Set(visibleTestimonials.map(t => t.batch)));
 
   const getObjectPosition = (name: string, type: 'video' | 'thumbnail') => {
     const n = name.toLowerCase();
@@ -66,7 +69,7 @@ export default function TestimonialsList() {
             {batch}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.filter(t => t.batch === batch).map(t => (
+            {visibleTestimonials.filter(t => t.batch === batch).map(t => (
               <div key={t.id} className="bg-edex-white/5 rounded-xl overflow-hidden border border-edex-white/10 hover:border-edex-neon transition-colors">
                 <div 
                   className="relative aspect-video bg-black cursor-pointer group overflow-hidden" 
@@ -112,6 +115,17 @@ export default function TestimonialsList() {
           </div>
         </div>
       ))}
+      
+      {visibleCount < testimonials.length && (
+        <div className="flex justify-center mt-12">
+          <button 
+            onClick={() => setVisibleCount(prev => prev + 6)}
+            className="px-8 py-3 bg-edex-neon text-edex-charcoal font-bold rounded-lg hover:opacity-90 transition-opacity"
+          >
+            View More
+          </button>
+        </div>
+      )}
     </div>
   );
 }
