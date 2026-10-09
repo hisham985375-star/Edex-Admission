@@ -376,7 +376,7 @@ export default function AdminTestimonials() {
                         <h3 className="text-white font-bold text-lg">{t.student_name}</h3>
                         <p className="text-gray-500 text-sm">{t.place} • {t.batch}</p>
                       </div>
-                      <div className="bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded flex items-center gap-1">
+                      <div className="bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded flex items-center gap-1 -mt-1">
                         <GripVertical className="w-3 h-3 text-gray-500" />
                         Order: {t.display_order}
                       </div>
