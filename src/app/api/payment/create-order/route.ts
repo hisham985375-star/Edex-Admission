@@ -5,6 +5,7 @@ import { fullApplicationSchema } from "@/lib/validations/application";
 import { paymentLimiter, getIdentifier } from "@/lib/rate-limit";
 import { ok, err, tooManyRequests, serverError } from "@/lib/api-response";
 import { PAYMENT_STATUS } from "@/lib/constants";
+import { syncToGoogleSheets } from "@/lib/google/sheets";
 
 /**
  * POST /api/payment/create-order
@@ -122,6 +123,23 @@ export async function POST(req: NextRequest) {
         console.error("[Payment] Application insert error:", insertError.message);
         return serverError("Failed to create application. Please try again.");
       }
+
+      // Sync to Google Sheets (fire-and-forget)
+      syncToGoogleSheets({
+        type: "application",
+        applicationId,
+        program: data.program,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        mobile: data.mobile,
+        email: emailLower,
+        district: data.district,
+        state: data.state,
+        highestQualification: data.highestQualification,
+        paymentStatus: PAYMENT_STATUS.PENDING,
+        paidAt: "",
+        razorpayPaymentId: "",
+      }).catch((e) => console.error("[Payment] Sheets sync error:", e));
     }
 
     // 5. Create Razorpay order — amount is ALWAYS ₹1,000 server-side
