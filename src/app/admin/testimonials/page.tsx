@@ -342,6 +342,7 @@ export default function AdminTestimonials() {
                   if (n.includes("mukthar")) return type === 'video' ? "object-[center_60%]" : "object-top";
                   if (n.includes("majida")) return "object-[center_50%]";
                   if (n.includes("fathima")) return "object-[center_40%]";
+                  if (n.includes("niyas")) return "object-[center_40%]";
                   if (n.includes("vyshnav") || n.includes("asil ali")) return "object-[center_45%]";
                   if (n.includes("afsal")) return "object-[center_15%]";
                   return "object-[center_25%]";
