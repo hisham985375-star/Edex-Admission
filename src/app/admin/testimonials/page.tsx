@@ -264,17 +264,15 @@ export default function AdminTestimonials() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-950 flex font-sans">
+    <div className="min-h-screen bg-[#161616] flex font-sans">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 border-r border-gray-800 transform transition-transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:z-auto`}>
-        <div className="p-6 border-b border-gray-800">
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#222222] border-r border-[#333333] transform transition-transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:z-auto`}>
+        <div className="p-6 border-b border-[#333333]">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#CEFF00] flex items-center justify-center">
-              <span className="text-[#161616] font-bold text-xs">EX</span>
-            </div>
+            <img src="/edex-logo.png" alt="EDEX Life School" className="h-8 object-contain" />
             <div>
               <div className="font-bold text-white text-sm">EDEX Admin</div>
-              <div className="text-gray-500 text-xs">Admissions Portal</div>
+              <div className="text-[#777777] text-xs">Admissions Portal</div>
             </div>
           </div>
         </div>
@@ -284,7 +282,7 @@ export default function AdminTestimonials() {
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${active ? "bg-[#CEFF00]/10 text-[#CEFF00]" : "text-gray-400 hover:text-white hover:bg-gray-800"}`}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${active ? "bg-[#CEFF00]/10 text-[#CEFF00]" : "text-[#999999] hover:text-white hover:bg-[#333333]"}`}
             >
               <Icon className="w-4 h-4" />
               {label}
@@ -299,9 +297,9 @@ export default function AdminTestimonials() {
 
       {/* Main content */}
       <div className="flex-1 min-w-0 flex flex-col h-screen">
-        <header className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex items-center justify-between shrink-0">
+        <header className="bg-[#222222] border-b border-[#333333] px-6 py-4 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
-            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden text-gray-400 hover:text-white">
+            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden text-[#999999] hover:text-white">
               {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
             <h1 className="text-lg font-bold text-white">Testimonials</h1>
@@ -319,17 +317,17 @@ export default function AdminTestimonials() {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="bg-gray-900 rounded-xl border border-gray-800 h-64 animate-pulse" />
+                <div key={i} className="bg-[#222222] rounded-xl border border-[#333333] h-64 animate-pulse" />
               ))}
             </div>
           ) : testimonials.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center p-6">
               <MessageSquare className="w-16 h-16 text-gray-800 mb-4" />
               <h3 className="text-xl font-bold text-white mb-2">No Testimonials</h3>
-              <p className="text-gray-500 mb-6 max-w-md">Upload student testimonials to show on the landing page. Videos will be processed and hosted on Cloudinary automatically.</p>
+              <p className="text-[#777777] mb-6 max-w-md">Upload student testimonials to show on the landing page. Videos will be processed and hosted on Cloudinary automatically.</p>
               <button 
                 onClick={() => setShowUploadModal(true)}
-                className="bg-gray-800 text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-700 transition-colors"
+                className="bg-[#333333] text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-700 transition-colors"
               >
                 Upload First Testimonial
               </button>
@@ -351,7 +349,7 @@ export default function AdminTestimonials() {
                 return (
                 <div 
                   key={t.id} 
-                  className={`bg-gray-900 border ${t.is_active ? 'border-gray-700 hover:border-gray-500' : 'border-gray-800 opacity-60'} rounded-xl overflow-hidden flex flex-col transition-all cursor-pointer group`}
+                  className={`bg-[#222222] border ${t.is_active ? 'border-[#444444] hover:border-gray-500' : 'border-[#333333] opacity-60'} rounded-xl overflow-hidden flex flex-col transition-all cursor-pointer group`}
                   onClick={() => openEditModal(t)}
                   onMouseEnter={() => setHoveredId(t.id)}
                   onMouseLeave={() => setHoveredId(null)}
@@ -377,24 +375,24 @@ export default function AdminTestimonials() {
                     <div className="flex justify-between items-start mb-2">
                       <div>
                         <h3 className="text-white font-bold text-lg">{t.student_name}</h3>
-                        <p className="text-gray-500 text-sm">{t.place} • {t.batch}</p>
+                        <p className="text-[#777777] text-sm">{t.place} • {t.batch}</p>
                       </div>
-                      <div className="bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded flex items-center gap-1 -mt-1">
-                        <GripVertical className="w-3 h-3 text-gray-500" />
+                      <div className="bg-[#333333] text-gray-300 text-xs px-2 py-1 rounded flex items-center gap-1 -mt-1">
+                        <GripVertical className="w-3 h-3 text-[#777777]" />
                         Order: {t.display_order}
                       </div>
                     </div>
                     
-                    <div className="mt-auto pt-4 flex items-center justify-between border-t border-gray-800">
+                    <div className="mt-auto pt-4 flex items-center justify-between border-t border-[#333333]">
                       <button
                         onClick={(e) => { e.stopPropagation(); handleToggleActive(t.id, t.is_active); }}
-                        className={`text-sm font-medium flex items-center gap-1 ${t.is_active ? 'text-gray-400 hover:text-yellow-400' : 'text-[#CEFF00] hover:text-white'}`}
+                        className={`text-sm font-medium flex items-center gap-1 ${t.is_active ? 'text-[#999999] hover:text-yellow-400' : 'text-[#CEFF00] hover:text-white'}`}
                       >
                         {t.is_active ? "Deactivate" : "Activate"}
                       </button>
                       <button
                         onClick={(e) => { e.stopPropagation(); handleDelete(t.id); }}
-                        className="p-2 text-gray-500 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-colors"
+                        className="p-2 text-[#777777] hover:text-red-400 hover:bg-[#333333] rounded-lg transition-colors"
                         title="Delete"
                       >
                         <Trash className="w-4 h-4" />
@@ -412,14 +410,14 @@ export default function AdminTestimonials() {
       {showUploadModal && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/80" onClick={closeUploadModal} />
-          <div className="relative bg-gray-900 border border-gray-800 rounded-xl w-full max-w-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800">
+          <div className="relative bg-[#222222] border border-[#333333] rounded-xl w-full max-w-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#333333]">
               <h2 className="text-lg font-bold text-white">{editingTestimonial ? "Edit Testimonial" : "Upload Testimonial"}</h2>
               <button 
                 type="button"
                 onClick={closeUploadModal} 
                 disabled={uploading}
-                className="text-gray-400 hover:text-white disabled:opacity-50"
+                className="text-[#999999] hover:text-white disabled:opacity-50"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -428,46 +426,46 @@ export default function AdminTestimonials() {
             <form onSubmit={handleUpload} className="p-6">
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1.5">Student Name *</label>
+                  <label className="block text-sm font-medium text-[#999999] mb-1.5">Student Name *</label>
                   <input
                     required
                     type="text"
                     value={studentName}
                     onChange={(e) => setStudentName(e.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:border-[#CEFF00]"
+                    className="w-full bg-[#333333] border border-[#444444] text-white rounded-lg px-4 py-2 focus:outline-none focus:border-[#CEFF00]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1.5">Place *</label>
+                  <label className="block text-sm font-medium text-[#999999] mb-1.5">Place *</label>
                   <input
                     required
                     type="text"
                     value={place}
                     onChange={(e) => setPlace(e.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:border-[#CEFF00]"
+                    className="w-full bg-[#333333] border border-[#444444] text-white rounded-lg px-4 py-2 focus:outline-none focus:border-[#CEFF00]"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1.5">Batch/Program *</label>
+                  <label className="block text-sm font-medium text-[#999999] mb-1.5">Batch/Program *</label>
                   <select
                     required
                     value={batch}
                     onChange={(e) => setBatch(e.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:border-[#CEFF00]"
+                    className="w-full bg-[#333333] border border-[#444444] text-white rounded-lg px-4 py-2 focus:outline-none focus:border-[#CEFF00]"
                   >
                     <option value="EGX 100 - Previous Batch">EGX 100 - Previous Batch</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1.5">Display Order</label>
+                  <label className="block text-sm font-medium text-[#999999] mb-1.5">Display Order</label>
                   <input
                     type="number"
                     value={displayOrder}
                     onChange={(e) => setDisplayOrder(e.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:border-[#CEFF00]"
+                    className="w-full bg-[#333333] border border-[#444444] text-white rounded-lg px-4 py-2 focus:outline-none focus:border-[#CEFF00]"
                   />
                 </div>
               </div>
@@ -475,9 +473,9 @@ export default function AdminTestimonials() {
               {!editingTestimonial && (
                 <div className="space-y-4 mb-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-1.5">Video File (MP4, WebM) *</label>
+                    <label className="block text-sm font-medium text-[#999999] mb-1.5">Video File (MP4, WebM) *</label>
                     <div 
-                      className={`border-2 border-dashed ${videoFile ? 'border-[#CEFF00] bg-[#CEFF00]/5' : 'border-gray-700 hover:border-gray-500'} rounded-lg p-6 text-center cursor-pointer transition-colors`}
+                      className={`border-2 border-dashed ${videoFile ? 'border-[#CEFF00] bg-[#CEFF00]/5' : 'border-[#444444] hover:border-gray-500'} rounded-lg p-6 text-center cursor-pointer transition-colors`}
                       onClick={() => fileInputRef.current?.click()}
                     >
                       <input 
@@ -492,7 +490,7 @@ export default function AdminTestimonials() {
                           <Check className="w-5 h-5" /> {videoFile.name} ({(videoFile.size / (1024 * 1024)).toFixed(2)} MB)
                         </div>
                       ) : (
-                        <div className="text-gray-400 flex flex-col items-center">
+                        <div className="text-[#999999] flex flex-col items-center">
                           <UploadCloud className="w-8 h-8 mb-2" />
                           <span>Click to browse for video</span>
                         </div>
@@ -504,7 +502,7 @@ export default function AdminTestimonials() {
               )}
 
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Custom Thumbnail (Optional)</label>
+                <label className="block text-sm font-medium text-[#999999] mb-1.5">Custom Thumbnail (Optional)</label>
                 <div className="flex items-center gap-4">
                   <input 
                     type="file" 
@@ -516,13 +514,13 @@ export default function AdminTestimonials() {
                   <button
                     type="button"
                     onClick={() => thumbInputRef.current?.click()}
-                    className="px-4 py-2 bg-gray-800 text-white rounded-lg text-sm hover:bg-gray-700 transition-colors"
+                    className="px-4 py-2 bg-[#333333] text-white rounded-lg text-sm hover:bg-gray-700 transition-colors"
                   >
                     {thumbnailFile ? "Change Thumbnail" : "Browse Image"}
                   </button>
-                  {thumbnailFile && <span className="text-sm text-gray-400 truncate max-w-[200px]">{thumbnailFile.name}</span>}
+                  {thumbnailFile && <span className="text-sm text-[#999999] truncate max-w-[200px]">{thumbnailFile.name}</span>}
                   {editingTestimonial && !thumbnailFile && (
-                    <span className="text-sm text-gray-500">Leave blank to keep current banner</span>
+                    <span className="text-sm text-[#777777]">Leave blank to keep current banner</span>
                   )}
                 </div>
               </div>

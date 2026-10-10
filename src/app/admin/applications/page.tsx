@@ -182,17 +182,15 @@ export default function AdminApplications() {
   const totalPages = Math.ceil(total / 20);
 
   return (
-    <div className="min-h-screen bg-gray-950 flex font-sans">
+    <div className="min-h-screen bg-[#161616] flex font-sans">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 border-r border-gray-800 transform transition-transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:z-auto`}>
-        <div className="p-6 border-b border-gray-800">
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#222222] border-r border-[#333333] transform transition-transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:z-auto`}>
+        <div className="p-6 border-b border-[#333333]">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#CEFF00] flex items-center justify-center">
-              <span className="text-[#161616] font-bold text-xs">EX</span>
-            </div>
+            <img src="/edex-logo.png" alt="EDEX Life School" className="h-8 object-contain" />
             <div>
               <div className="font-bold text-white text-sm">EDEX Admin</div>
-              <div className="text-gray-500 text-xs">Admissions Portal</div>
+              <div className="text-[#777777] text-xs">Admissions Portal</div>
             </div>
           </div>
         </div>
@@ -202,7 +200,7 @@ export default function AdminApplications() {
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${active ? "bg-[#CEFF00]/10 text-[#CEFF00]" : "text-gray-400 hover:text-white hover:bg-gray-800"}`}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${active ? "bg-[#CEFF00]/10 text-[#CEFF00]" : "text-[#999999] hover:text-white hover:bg-[#333333]"}`}
             >
               <Icon className="w-4 h-4" />
               {label}
@@ -217,9 +215,9 @@ export default function AdminApplications() {
 
       {/* Main content */}
       <div className="flex-1 min-w-0 flex flex-col h-screen">
-        <header className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex items-center justify-between shrink-0">
+        <header className="bg-[#222222] border-b border-[#333333] px-6 py-4 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
-            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden text-gray-400 hover:text-white">
+            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden text-[#999999] hover:text-white">
               {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
             <h1 className="text-lg font-bold text-white">Applications</h1>
@@ -228,24 +226,24 @@ export default function AdminApplications() {
 
         <main className="p-6 flex-1 overflow-auto">
           {/* Filters */}
-          <div className="flex flex-col md:flex-row gap-4 mb-6 items-center justify-between bg-gray-900 p-4 rounded-xl border border-gray-800">
+          <div className="flex flex-col md:flex-row gap-4 mb-6 items-center justify-between bg-[#222222] p-4 rounded-xl border border-[#333333]">
             <div className="relative w-full md:w-96">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#777777]" />
               <input 
                 type="text" 
                 placeholder="Search ID, name, email, phone..." 
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-gray-800 border border-gray-700 text-white text-sm rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:border-[#CEFF00]"
+                className="w-full bg-[#333333] border border-[#444444] text-white text-sm rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:border-[#CEFF00]"
               />
             </div>
 
             <div className="flex items-center gap-3 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
-              <Filter className="w-4 h-4 text-gray-500 shrink-0" />
+              <Filter className="w-4 h-4 text-[#777777] shrink-0" />
               <select
                 value={program}
                 onChange={(e) => { setProgram(e.target.value); setPage(1); }}
-                className="bg-gray-800 border border-gray-700 text-gray-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#CEFF00] shrink-0"
+                className="bg-[#333333] border border-[#444444] text-gray-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#CEFF00] shrink-0"
               >
                 <option value="all">All Programs</option>
                 <option value="EGX 100">EGX 100</option>
@@ -254,7 +252,7 @@ export default function AdminApplications() {
               <select
                 value={paymentStatus}
                 onChange={(e) => { setPaymentStatus(e.target.value); setPage(1); }}
-                className="bg-gray-800 border border-gray-700 text-gray-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#CEFF00] shrink-0"
+                className="bg-[#333333] border border-[#444444] text-gray-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#CEFF00] shrink-0"
               >
                 <option value="all">Any Payment</option>
                 <option value="paid">Paid</option>
@@ -263,7 +261,7 @@ export default function AdminApplications() {
               <select
                 value={admissionStatus}
                 onChange={(e) => { setAdmissionStatus(e.target.value); setPage(1); }}
-                className="bg-gray-800 border border-gray-700 text-gray-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#CEFF00] shrink-0"
+                className="bg-[#333333] border border-[#444444] text-gray-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#CEFF00] shrink-0"
               >
                 <option value="all">Any Status</option>
                 <option value="New">New</option>
@@ -276,10 +274,10 @@ export default function AdminApplications() {
           </div>
 
           {/* Table */}
-          <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+          <div className="bg-[#222222] border border-[#333333] rounded-xl overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm text-gray-400">
-                <thead className="bg-gray-800/50 text-gray-300 text-xs uppercase font-medium">
+              <table className="w-full text-left text-sm text-[#999999]">
+                <thead className="bg-[#333333]/50 text-gray-300 text-xs uppercase font-medium">
                   <tr>
                     <th className="px-6 py-4">ID & Date</th>
                     <th className="px-6 py-4">Applicant</th>
@@ -292,32 +290,32 @@ export default function AdminApplications() {
                 <tbody className="divide-y divide-gray-800">
                   {loading ? (
                     <tr>
-                      <td colSpan={6} className="px-6 py-12 text-center text-gray-500">Loading...</td>
+                      <td colSpan={6} className="px-6 py-12 text-center text-[#777777]">Loading...</td>
                     </tr>
                   ) : applications.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="px-6 py-12 text-center text-gray-500">No applications found</td>
+                      <td colSpan={6} className="px-6 py-12 text-center text-[#777777]">No applications found</td>
                     </tr>
                   ) : (
                     applications.map((app) => (
-                      <tr key={app.id} className="hover:bg-gray-800/30 transition-colors">
+                      <tr key={app.id} className="hover:bg-[#333333]/30 transition-colors">
                         <td className="px-6 py-4">
                           <div className="text-white font-medium">{app.id}</div>
-                          <div className="text-xs text-gray-500 mt-1">{format(new Date(app.created_at), 'dd MMM yyyy, HH:mm')}</div>
+                          <div className="text-xs text-[#777777] mt-1">{format(new Date(app.created_at), 'dd MMM yyyy, HH:mm')}</div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="text-white font-medium">{app.first_name} {app.last_name}</div>
-                          <div className="text-xs text-gray-500 mt-1">{app.email}</div>
-                          <div className="text-xs text-gray-500">{app.mobile}</div>
+                          <div className="text-xs text-[#777777] mt-1">{app.email}</div>
+                          <div className="text-xs text-[#777777]">{app.mobile}</div>
                         </td>
                         <td className="px-6 py-4 font-medium text-gray-300">{app.program}</td>
                         <td className="px-6 py-4">
-                          <span className={`px-2 py-1 rounded text-xs font-medium ${statusColors[app.payment_status] || "bg-gray-800 text-gray-400"}`}>
+                          <span className={`px-2 py-1 rounded text-xs font-medium ${statusColors[app.payment_status] || "bg-[#333333] text-[#999999]"}`}>
                             {app.payment_status === "payment_pending" ? "Pending" : app.payment_status}
                           </span>
                         </td>
                         <td className="px-6 py-4">
-                          <span className={`px-2 py-1 rounded text-xs font-medium ${statusColors[app.admission_status] || "bg-gray-800 text-gray-400"}`}>
+                          <span className={`px-2 py-1 rounded text-xs font-medium ${statusColors[app.admission_status] || "bg-[#333333] text-[#999999]"}`}>
                             {app.admission_status}
                           </span>
                         </td>
@@ -325,13 +323,13 @@ export default function AdminApplications() {
                           <div className="flex items-center justify-end gap-2">
                             <button 
                               onClick={() => handleOpenDrawer(app)}
-                              className="p-2 text-gray-400 hover:text-[#CEFF00] hover:bg-gray-800 rounded-lg transition-colors"
+                              className="p-2 text-[#999999] hover:text-[#CEFF00] hover:bg-[#333333] rounded-lg transition-colors"
                             >
                               <Edit className="w-4 h-4" />
                             </button>
                             <button 
                               onClick={() => handleDelete(app.id)}
-                              className="p-2 text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-colors"
+                              className="p-2 text-[#999999] hover:text-red-400 hover:bg-[#333333] rounded-lg transition-colors"
                             >
                               <Trash className="w-4 h-4" />
                             </button>
@@ -346,22 +344,22 @@ export default function AdminApplications() {
 
             {/* Pagination */}
             {!loading && total > 0 && (
-              <div className="px-6 py-4 border-t border-gray-800 flex items-center justify-between">
-                <span className="text-sm text-gray-500">
+              <div className="px-6 py-4 border-t border-[#333333] flex items-center justify-between">
+                <span className="text-sm text-[#777777]">
                   Showing <span className="text-white">{(page - 1) * 20 + 1}</span> to <span className="text-white">{Math.min(page * 20, total)}</span> of <span className="text-white">{total}</span>
                 </span>
                 <div className="flex items-center gap-2">
                   <button 
                     onClick={() => setPage(p => Math.max(1, p - 1))}
                     disabled={page === 1}
-                    className="p-1.5 rounded-lg border border-gray-700 text-gray-400 disabled:opacity-30 hover:bg-gray-800"
+                    className="p-1.5 rounded-lg border border-[#444444] text-[#999999] disabled:opacity-30 hover:bg-[#333333]"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
                   <button 
                     onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                     disabled={page >= totalPages}
-                    className="p-1.5 rounded-lg border border-gray-700 text-gray-400 disabled:opacity-30 hover:bg-gray-800"
+                    className="p-1.5 rounded-lg border border-[#444444] text-[#999999] disabled:opacity-30 hover:bg-[#333333]"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </button>
@@ -376,28 +374,28 @@ export default function AdminApplications() {
       {selectedApp && (
         <div className="fixed inset-0 z-[60] flex justify-end">
           <div className="absolute inset-0 bg-black/60" onClick={() => setSelectedApp(null)} />
-          <div className="relative w-full max-w-md bg-gray-900 h-full shadow-2xl flex flex-col animate-in slide-in-from-right">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800">
+          <div className="relative w-full max-w-md bg-[#222222] h-full shadow-2xl flex flex-col animate-in slide-in-from-right">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#333333]">
               <h2 className="text-lg font-bold text-white">Manage Application</h2>
-              <button onClick={() => setSelectedApp(null)} className="text-gray-400 hover:text-white">
+              <button onClick={() => setSelectedApp(null)} className="text-[#999999] hover:text-white">
                 <X className="w-5 h-5" />
               </button>
             </div>
             
             <div className="p-6 flex-1 overflow-auto">
               <div className="mb-6">
-                <div className="text-sm text-gray-500 mb-1">Applicant</div>
+                <div className="text-sm text-[#777777] mb-1">Applicant</div>
                 <div className="text-lg font-bold text-white">{selectedApp.first_name} {selectedApp.last_name}</div>
-                <div className="text-sm text-gray-400">{selectedApp.id}</div>
+                <div className="text-sm text-[#999999]">{selectedApp.id}</div>
               </div>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1.5">Admission Status</label>
+                  <label className="block text-sm font-medium text-[#999999] mb-1.5">Admission Status</label>
                   <select
                     value={updateStatus}
                     onChange={(e) => setUpdateStatus(e.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:border-[#CEFF00]"
+                    className="w-full bg-[#333333] border border-[#444444] text-white rounded-lg px-4 py-2 focus:outline-none focus:border-[#CEFF00]"
                   >
                     <option value="New">New</option>
                     <option value="Contacted">Contacted</option>
@@ -408,19 +406,19 @@ export default function AdminApplications() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1.5">Internal Notes</label>
+                  <label className="block text-sm font-medium text-[#999999] mb-1.5">Internal Notes</label>
                   <textarea
                     value={internalNotes}
                     onChange={(e) => setInternalNotes(e.target.value)}
                     rows={6}
                     placeholder="Add private notes about this applicant..."
-                    className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-[#CEFF00] resize-none"
+                    className="w-full bg-[#333333] border border-[#444444] text-white rounded-lg px-4 py-3 focus:outline-none focus:border-[#CEFF00] resize-none"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="p-6 border-t border-gray-800 flex items-center justify-end gap-3">
+            <div className="p-6 border-t border-[#333333] flex items-center justify-end gap-3">
               <button 
                 onClick={() => setSelectedApp(null)}
                 className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors"
